@@ -215,43 +215,43 @@ impl GenericClockController {
         #[cfg(feature = "usb")]
         configure_usb_correction(oscctrl);
 
-        // GCLK5 set to 2MHz
-        unsafe {
-            state.gclk.genctrl[5].write(|w| {
-                w.src().dfll();
-                w.genen().set_bit();
-                w.div().bits(24)
-            });
-        }
+        // // GCLK5 set to 2MHz
+        // unsafe {
+        //     state.gclk.genctrl[5].write(|w| {
+        //         w.src().dfll();
+        //         w.genen().set_bit();
+        //         w.div().bits(24)
+        //     });
+        // }
 
-        while state.gclk.syncbusy.read().genctrl().is_gclk5() {}
+        // while state.gclk.syncbusy.read().genctrl().is_gclk5() {}
 
-        configure_and_enable_dpll0(oscctrl, &mut state.gclk);
-        wait_for_dpllrdy(oscctrl);
+        // configure_and_enable_dpll0(oscctrl, &mut state.gclk);
+        // wait_for_dpllrdy(oscctrl);
 
-        unsafe {
-            // GCLK0 set to DPLL0 (120MHz)
-            state.gclk.genctrl[0].write(|w| {
-                w.src().dpll0();
-                w.div().bits(1);
-                w.oe().set_bit();
-                w.genen().set_bit()
-            });
-        }
+        // unsafe {
+        //     // GCLK0 set to DPLL0 (120MHz)
+        //     state.gclk.genctrl[0].write(|w| {
+        //         w.src().dpll0();
+        //         w.div().bits(1);
+        //         w.oe().set_bit();
+        //         w.genen().set_bit()
+        //     });
+        // }
 
-        while state.gclk.syncbusy.read().genctrl().is_gclk0() {}
+        // while state.gclk.syncbusy.read().genctrl().is_gclk0() {}
 
-        mclk.cpudiv.write(|w| w.div().div1());
+        // mclk.cpudiv.write(|w| w.div().div1());
 
         Self {
             state,
             gclks: [
-                OSC120M_FREQ,
+                OSC48M_FREQ,
                 OSC32K_FREQ,
                 Hertz(0),
                 Hertz(0),
                 Hertz(0),
-                MegaHertz(2).into(),
+                Hertz(0), // MegaHertz(2).into(),
                 Hertz(0),
                 Hertz(0),
                 Hertz(0),
